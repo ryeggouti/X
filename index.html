@@ -14,83 +14,86 @@
       --shadow: 0 8px 24px rgba(120,80,110,0.08);
       --radius: 18px;
       font-family: 'Poppins', sans-serif;
-    }
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: linear-gradient(180deg,#fff5f8 0%,var(--bg) 100%);
-      color: #40283a;
-      overflow: hidden;
-    }
-    .intro-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at top left, #ffe6ef, #fff8fb);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .intro-screen.hidden {
-      opacity: 0;
-      transform: scale(1.1);
-      pointer-events: none;
-    }
-    .intro-title {
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: #7a2f4a;
-      text-align: center;
-      animation: fadeUp 1.6s ease forwards;
-    }
-    .intro-subtitle {
-      color: var(--muted);
-      margin-top: 10px;
-      font-size: 1rem;
-      animation: fadeUp 2s ease forwards;
-    }
-    .enter-btn {
-      margin-top: 40px;
-      padding: 12px 32px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #ffdfe7, #ffeef6);
-      font-size: 1rem;
-      color: #7a2f4a;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(120,80,110,0.15);
-      transition: transform 0.2s ease;
-    }
-    .enter-btn:hover {
-      transform: scale(1.05);
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: none; }
-    }/* album */
+    }html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg,#fff5f8 0%,var(--bg) 100%);
+  color: #40283a;
+  overflow: hidden;
+}
+
+/* Intro Screen */
+.intro-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #ffe6ef, #fff8fb);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+  animation: fadeIn 1s ease forwards;
+}
+
+.intro-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #7a2f4a;
+  margin-bottom: 20px;
+  animation: fadeUp 1.5s ease forwards;
+}
+
+.enter-btn {
+  padding: 16px 40px;
+  font-size: 1.2rem;
+  color: #7a2f4a;
+  background: linear-gradient(90deg, #ffdfe7, #ffeef6);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(120,80,110,0.15);
+  animation: glow 2s ease-in-out infinite alternate, bounce 1.2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 8px 20px rgba(120,80,110,0.15); }
+  to { box-shadow: 0 12px 30px rgba(255,180,220,0.35); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Album */
 .wrap { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 30px; animation: fadeIn 1s ease forwards; }
 .wrap.visible { display: flex; }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+
 .album {
   width: 920px; max-width: 95vw; background: var(--card); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); position: relative; overflow: hidden;
 }
+
 header { display: flex; gap: 18px; align-items: center; }
 .logo { width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg,var(--accent),#ffdfe7); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #7a2f4a; box-shadow: 0 6px 18px rgba(250,200,230,0.35); }
 h1 { font-size: 20px; margin: 0; }
 p.lead { margin: 4px 0 0; color: var(--muted); }
+
 .stage { margin-top: 22px; display: flex; align-items: center; gap: 20px; }
 .frame { flex: 1; display: flex; justify-content: center; }
 .polaroid { width: 640px; max-width: 82vw; background: #fff; border-radius: 14px; padding: 18px; padding-bottom: 56px; box-shadow: 0 18px 40px rgba(100,40,70,0.12); position: relative; transition: transform .45s cubic-bezier(.2,.9,.25,1); }
-.photo { height: 420px; border-radius: 8px; background-size: cover; background-position: center; }
+.photo { height: 420px; border-radius: 8px; background-size: cover; background-position: center; transition: opacity 0.4s ease; }
 .caption { position: absolute; left: 18px; right: 18px; bottom: 18px; font-size: 15px; color: #6a3f53; }
+
 .nav { width: 86px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .btn { background: transparent; border: 0; font-size: 26px; padding: 10px; border-radius: 12px; cursor: pointer; }
 .page-ind { font-size: 13px; color: var(--muted); }
+
 .controls { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
 .play { padding: 8px 12px; border-radius: 999px; border: 0; background: linear-gradient(90deg,#ffdfe7,#ffeef6); cursor: pointer; }
 footer { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
@@ -138,18 +141,22 @@ footer { display: flex; justify-content: space-between; align-items: center; mar
       </audio>
     </main>
   </div>  <script>
-    // intro animation
+    // Intro button
     const intro = document.getElementById('intro');
     const albumWrap = document.getElementById('albumWrap');
     const enterBtn = document.getElementById('enterBtn');
+    const audio = document.getElementById('bgAudio');
+
     enterBtn.addEventListener('click', () => {
-      intro.classList.add('hidden');
-      setTimeout(()=>{
-        intro.style.display='none';
+      intro.style.opacity = 0;
+      setTimeout(() => {
+        intro.style.display = 'none';
         albumWrap.classList.add('visible');
-      },900);
+        audio.play();
+      }, 900);
     });
 
+    // Page navigation
     const pages = [
       {img: 'https://via.placeholder.com/900x600?text=Photo+1', caption: 'Our first trip — that sunset.'},
       {img: 'https://via.placeholder.com/900x600?text=Photo+2', caption: 'That silly market day we got lost.'},
@@ -179,7 +186,6 @@ footer { display: flex; justify-content: space-between; align-items: center; mar
     prev.addEventListener('click', ()=>{ index = (index-1+pages.length)%pages.length; render(); });
     next.addEventListener('click', ()=>{ index = (index+1)%pages.length; render(); });
 
-    const audio = document.getElementById('bgAudio');
     const playBtn = document.getElementById('playBtn');
     let playing = false;
     playBtn.addEventListener('click', async ()=>{
