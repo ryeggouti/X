@@ -6,173 +6,192 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Douae — Our Memory Album</title>
   <style>
-    :root{
-      --bg:#fff8fb;
-      --card:#fff;
-      --accent:#f7c6d7;
-      --muted:#a88b9f;
+    :root {
+      --bg: #fff8fb;
+      --card: #fff;
+      --accent: #f7c6d7;
+      --muted: #a88b9f;
       --shadow: 0 8px 24px rgba(120,80,110,0.08);
-      --radius:18px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --radius: 18px;
+      font-family: 'Poppins', sans-serif;
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#fff5f8 0%,var(--bg) 100%);color:#40283a}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px}.album{
-  width:920px;max-width:95vw;background:var(--card);border-radius:22px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(180deg,#fff5f8 0%,var(--bg) 100%);
+      color: #40283a;
+      overflow: hidden;
+    }
+    .intro-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top left, #ffe6ef, #fff8fb);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .intro-screen.hidden {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+    .intro-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #7a2f4a;
+      text-align: center;
+      animation: fadeUp 1.6s ease forwards;
+    }
+    .intro-subtitle {
+      color: var(--muted);
+      margin-top: 10px;
+      font-size: 1rem;
+      animation: fadeUp 2s ease forwards;
+    }
+    .enter-btn {
+      margin-top: 40px;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ffdfe7, #ffeef6);
+      font-size: 1rem;
+      color: #7a2f4a;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(120,80,110,0.15);
+      transition: transform 0.2s ease;
+    }
+    .enter-btn:hover {
+      transform: scale(1.05);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: none; }
+    }/* album */
+.wrap { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 30px; animation: fadeIn 1s ease forwards; }
+.wrap.visible { display: flex; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
-header{display:flex;gap:18px;align-items:center}
-.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffdfe7);display:flex;align-items:center;justify-content:center;font-weight:700;color:#7a2f4a;box-shadow:0 6px 18px rgba(250,200,230,0.35)}
-h1{font-size:20px;margin:0}
-p.lead{margin:4px 0 0;color:var(--muted)}
-
-/* page card */
-.stage{margin-top:22px;display:flex;align-items:center;gap:20px}
-.frame{flex:1;display:flex;justify-content:center}
-.polaroid{width:640px;max-width:82vw;background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:18px;padding-bottom:56px;box-shadow:0 18px 40px rgba(100,40,70,0.12);position:relative;transition:transform .45s cubic-bezier(.2,.9,.25,1)}
-.polaroid .photo{height:420px;border-radius:8px;background-size:cover;background-position:center;box-shadow:inset 0 -40px 60px rgba(255,255,255,0.05)}
-.caption{position:absolute;left:18px;right:18px;bottom:18px;font-size:15px;color:#6a3f53}
-
-/* nav */
-.nav{width:86px;display:flex;flex-direction:column;gap:12px;align-items:center}
-.btn{background:transparent;border:0;font-size:26px;padding:10px;border-radius:12px;cursor:pointer}
-.btn:active{transform:translateY(1px)}
-.page-ind{font-size:13px;color:var(--muted)}
-
-/* controls */
-.controls{display:flex;align-items:center;gap:12px;margin-top:18px}
-.play{padding:8px 12px;border-radius:999px;border:0;background:linear-gradient(90deg,#ffdfe7,#ffeef6);cursor:pointer}
-.small{font-size:13px;color:var(--muted)}
-
-/* footer */
-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
-.heart{background:linear-gradient(90deg,#ffd6e6,#ffeef6);border-radius:999px;padding:8px 12px;border:0}
-
-/* responsive */
-@media (max-width:780px){
-  .nav{display:none}
-  .polaroid{width:92vw;padding-bottom:72px}
-  .polaroid .photo{height:320px}
+.album {
+  width: 920px; max-width: 95vw; background: var(--card); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); position: relative; overflow: hidden;
 }
-
-/* subtle fade */
-.fade{opacity:0;transform:translateY(8px)}
-.fade.in{opacity:1;transform:none;transition:all .6s cubic-bezier(.2,.9,.25,1)}
-
-/* polaroid tape */
-.tape{position:absolute;left:50%;transform:translateX(-50%);top:-10px;width:120px;height:28px;background:linear-gradient(90deg,#fff7f9,#fff1f5);border-radius:6px;box-shadow:0 6px 18px rgba(180,100,140,0.06);display:flex;align-items:center;justify-content:center;color:#9e5d78;font-weight:600}
+header { display: flex; gap: 18px; align-items: center; }
+.logo { width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg,var(--accent),#ffdfe7); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #7a2f4a; box-shadow: 0 6px 18px rgba(250,200,230,0.35); }
+h1 { font-size: 20px; margin: 0; }
+p.lead { margin: 4px 0 0; color: var(--muted); }
+.stage { margin-top: 22px; display: flex; align-items: center; gap: 20px; }
+.frame { flex: 1; display: flex; justify-content: center; }
+.polaroid { width: 640px; max-width: 82vw; background: #fff; border-radius: 14px; padding: 18px; padding-bottom: 56px; box-shadow: 0 18px 40px rgba(100,40,70,0.12); position: relative; transition: transform .45s cubic-bezier(.2,.9,.25,1); }
+.photo { height: 420px; border-radius: 8px; background-size: cover; background-position: center; }
+.caption { position: absolute; left: 18px; right: 18px; bottom: 18px; font-size: 15px; color: #6a3f53; }
+.nav { width: 86px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.btn { background: transparent; border: 0; font-size: 26px; padding: 10px; border-radius: 12px; cursor: pointer; }
+.page-ind { font-size: 13px; color: var(--muted); }
+.controls { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.play { padding: 8px 12px; border-radius: 999px; border: 0; background: linear-gradient(90deg,#ffdfe7,#ffeef6); cursor: pointer; }
+footer { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+.heart { background: linear-gradient(90deg,#ffd6e6,#ffeef6); border-radius: 999px; padding: 8px 12px; border: 0; }
 
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="intro-screen" id="intro">
+    <div class="intro-title">Hey Douae 💕</div>
+    <div class="intro-subtitle">This is our little memory album — ready to open?</div>
+    <button class="enter-btn" id="enterBtn">Enter</button>
+  </div>  <div class="wrap" id="albumWrap">
     <main class="album" role="main">
       <header>
-        <div class="logo">D &nbsp;❤️</div>
+        <div class="logo">D ❤️</div>
         <div>
           <h1>Hey Douae — Our Memory Album</h1>
-          <p class="lead">A little collection of moments. Scan the QR and flip through — made with ❤️</p>
+          <p class="lead">A little collection of moments. Flip through them with love.</p>
         </div>
-      </header><section class="stage">
-    <div class="frame">
-      <div class="polaroid" id="polaroid">
-        <div class="tape">Our story</div>
-        <div id="photo" class="photo" style="background-image: url('https://via.placeholder.com/900x600?text=Photo+1');"></div>
-        <div class="caption" id="caption">Photo caption placeholder — "Our first trip"</div>
+      </header>
+      <section class="stage">
+        <div class="frame">
+          <div class="polaroid" id="polaroid">
+            <div class="photo" id="photo" style="background-image:url('https://via.placeholder.com/900x600?text=Photo+1');"></div>
+            <div class="caption" id="caption">Photo caption placeholder — "Our first trip"</div>
+          </div>
+        </div>
+        <aside class="nav">
+          <button class="btn" id="prev">◀</button>
+          <div class="page-ind" id="pageInd">1 / 6</div>
+          <button class="btn" id="next">▶</button>
+        </aside>
+      </section>
+      <div class="controls">
+        <button class="play" id="playBtn">Play music ▶</button>
+        <div class="small">Music placeholder (replace with your Spotify or MP3 URL)</div>
       </div>
-    </div>
-
-    <aside class="nav" aria-hidden="true">
-      <button class="btn" id="prev" title="Previous">◀</button>
-      <div class="page-ind" id="pageInd">1 / 6</div>
-      <button class="btn" id="next" title="Next">▶</button>
-    </aside>
-  </section>
-
-  <div class="controls">
-    <button class="play" id="playBtn">Play music ▶</button>
-    <div class="small">Music placeholder (replace with your Spotify or MP3 URL)</div>
-  </div>
-
-  <footer>
-    <div class="small">Tip: Replace the placeholder images and captions in the code with your photos.</div>
-    <button class="heart" id="secretBtn">❤️ Open a secret</button>
-  </footer>
-
-  <!-- hidden audio element (placeholder) -->
-  <audio id="bgAudio" loop preload="none">
-    <!-- Replace the src with your MP3 file URL or remove the element to use Spotify embed instead -->
-    <source src="https://example.com/placeholder-music.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-</main>
-
+      <footer>
+        <div class="small">Tip: Replace the placeholder images and captions with your photos.</div>
+        <button class="heart" id="secretBtn">❤️ Secret</button>
+      </footer>
+      <audio id="bgAudio" loop preload="none">
+        <source src="https://example.com/placeholder-music.mp3" type="audio/mpeg">
+      </audio>
+    </main>
   </div>  <script>
-    // pages data (placeholders). Replace URLs and captions with your images & captions.
+    // intro animation
+    const intro = document.getElementById('intro');
+    const albumWrap = document.getElementById('albumWrap');
+    const enterBtn = document.getElementById('enterBtn');
+    enterBtn.addEventListener('click', () => {
+      intro.classList.add('hidden');
+      setTimeout(()=>{
+        intro.style.display='none';
+        albumWrap.classList.add('visible');
+      },900);
+    });
+
     const pages = [
-      {img: 'https://via.placeholder.com/900x600?text=Photo+1', caption: 'Our first trip — can\'t forget that sunset.'},
+      {img: 'https://via.placeholder.com/900x600?text=Photo+1', caption: 'Our first trip — that sunset.'},
       {img: 'https://via.placeholder.com/900x600?text=Photo+2', caption: 'That silly market day we got lost.'},
       {img: 'https://via.placeholder.com/900x600?text=Photo+3', caption: 'Laughing until midnight.'},
       {img: 'https://via.placeholder.com/900x600?text=Photo+4', caption: 'The little cafe where we talked for hours.'},
       {img: 'https://via.placeholder.com/900x600?text=Photo+5', caption: 'A quiet morning, coffee and your smile.'},
-      {img: 'https://via.placeholder.com/900x600?text=Photo+6', caption: 'Here\'s to the next chapter...'
-      }
+      {img: 'https://via.placeholder.com/900x600?text=Photo+6', caption: 'Here\'s to the next chapter...'}
     ];
 
     let index = 0;
     const photoEl = document.getElementById('photo');
     const captionEl = document.getElementById('caption');
     const pageInd = document.getElementById('pageInd');
-    const polaroid = document.getElementById('polaroid');
     const prev = document.getElementById('prev');
     const next = document.getElementById('next');
 
-    function render(){
-      // flip animation
-      polaroid.classList.remove('in');
-      polaroid.style.transform = 'perspective(900px) rotateY(20deg) scale(.98)';
+    function render() {
+      photoEl.style.opacity = 0;
       setTimeout(()=>{
         photoEl.style.backgroundImage = `url('${pages[index].img}')`;
         captionEl.textContent = pages[index].caption;
         pageInd.textContent = `${index+1} / ${pages.length}`;
-        polaroid.style.transform = '';
-        polaroid.classList.add('in');
-      },180);
+        photoEl.style.opacity = 1;
+      },250);
     }
 
     prev.addEventListener('click', ()=>{ index = (index-1+pages.length)%pages.length; render(); });
     next.addEventListener('click', ()=>{ index = (index+1)%pages.length; render(); });
 
-    // keyboard support
-    window.addEventListener('keydown', e=>{
-      if(e.key === 'ArrowRight' || e.key === 'd') next.click();
-      if(e.key === 'ArrowLeft' || e.key === 'a') prev.click();
-    })
-
-    // init
-    setTimeout(()=>{ polaroid.classList.add('in'); },80);
-    render();
-
-    // audio controls
     const audio = document.getElementById('bgAudio');
     const playBtn = document.getElementById('playBtn');
     let playing = false;
     playBtn.addEventListener('click', async ()=>{
-      if(!playing){
-        try{ await audio.play(); playing = true; playBtn.textContent = 'Pause music ⏸'; }
-        catch(e){ alert('Autoplay blocked by browser — tap play again or replace with a Spotify embed.'); }
-      } else { audio.pause(); playing = false; playBtn.textContent = 'Play music ▶'; }
+      if(!playing){ await audio.play(); playing = true; playBtn.textContent = 'Pause music ⏸'; }
+      else { audio.pause(); playing = false; playBtn.textContent = 'Play music ▶'; }
     });
 
-    // secret easter egg
     const secretBtn = document.getElementById('secretBtn');
     secretBtn.addEventListener('click', ()=>{
-      const msg = `Douae — every page is a small promise: more laughter, more adventures, more quiet mornings together. I love you.`;
-      alert(msg);
+      alert('Douae — every page is a promise of laughter, adventures, and love. ❤️');
     });
 
-    // helper: replace content quickly from console (optional)
-    // Example: window.updatePage(0, 'https://yourlink.jpg', 'Caption for photo 1')
-    window.updatePage = (i, img, cap) => { if(pages[i]){ pages[i].img = img; pages[i].caption = cap; if(i===index) render(); } };
+    render();
   </script></body>
 </html>
